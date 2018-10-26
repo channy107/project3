@@ -2,6 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import os
 
+from project3 import settings
+
+
 def upload1(request):
     if request.method == 'GET':
         return render(request, 'file/upload1.html',{})
@@ -38,3 +41,13 @@ def login(request, id):
     request.session['id'] = id
 
     return HttpResponse('Login!')
+
+def download(request):
+    filepath = os.path.join(settings.BASE_DIR, 'kim/197264_172614742787849_388814_n.jpg')
+    filename = os.path.basename(filepath)
+    with open(filepath, 'rb') as f:
+        response = HttpResponse(f, content_type='image/jpeg')
+        # response = HttpResponse(f, content_type='application/octet-stream')
+        response['Content-Disposition'] = 'attachment; filename="{}"'.\
+            format(filename)
+        return response
