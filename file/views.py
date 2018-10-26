@@ -9,9 +9,12 @@ def upload1(request):
         upload_file = request.FILES['my_file']
 
         login_id = request.session['id']
-        os.mkdir(login_id) # 디렉토리 생성
+        try:
+            os.mkdir(login_id) # 디렉토리 생성
+        except FileExistsError:
+            pass
 
-        with open('file/'+ upload_file.name, 'wb') as file:
+        with open(login_id + '/'+ upload_file.name, 'wb') as file:
             for chunk in upload_file.chunks():
                 file.write(chunk)
 
