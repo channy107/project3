@@ -18,7 +18,15 @@ def upload2(request):
     else:
         upload_files = request.FILES.getlist('my_file')
         for upload_file in upload_files:
-            print(upload_file.name)
+            with open('file/' + upload_file.name, 'wb') \
+                    as file:
+                for chunk in upload_file.chunks():
+                    file.write(chunk)
 
 
         return HttpResponse('완료'+ upload_file.name)
+
+def login(request, id):
+    request.session['id'] = id
+
+    return HttpResponse('Login!')
